@@ -1,3 +1,52 @@
+# Assessment report:
+## Commands used in linux VM:
+~~~
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install nginx git
+systemctl status nginx
+git config --global user.name "Aliaksandr Aliaksandrau”
+git config --global user.email "aliaksandra@playtika.com"
+git clone https://github.com/shurikby/material-design-template.git
+ssh-keygen
+cat /home/shurik/.ssh/id_rsa.pub
+git remote set-url origin git@github.com:shurikby/material-design-template
+cp /etc/nginx/sites-available/default ~/default.bak
+sudo vi /etc/nginx/sites-available/default
+sudo nginx -T
+systemctl restart nginx
+crontab -e
+systemctl restart cron
+grep CRON /var/log/syslog
+~~~
+
+## Cronjob
+
+    * * * * * /bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' >> /home/shurik/cron.log
+
+## Nginx configuration
+
+file `/etc/nginx/sites-available/default`:
+~~~
+---	root /var/www/html;
++++	root /home/shurik/material-design-template/www;
+~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <h1>Material Design One Page HTML Template</h1>
 <p>MD One page template is fully responsive and free to use. This HTML template is based on <a href="http://materializecss.com/">Materialize</a>, a CSS Framework based on Material Design.</p>
 <a href="http://joashpereira.com/templates/material_one_pager/">View Demo</a>
