@@ -1,12 +1,14 @@
 # Assessment report:
 ## Commands used in linux VM:
+There is also a script provided for automatic deployment. You can find it in Assessment report/deploy.sh
+
 ~~~
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install nginx git
 sudo systemctl status nginx
-git config --global user.name "Aliaksandr Aliaksandrau”
-git config --global user.email "aliaksandra@playtika.com"
+git config --global user.name "*********”
+git config --global user.email "********"
 git clone https://github.com/shurikby/material-design-template.git
 ssh-keygen
 cat /home/shurik/.ssh/id_rsa.pub
