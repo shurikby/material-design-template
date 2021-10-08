@@ -23,7 +23,35 @@ grep CRON /var/log/syslog   # check if job is actually running
 ## Cronjob
 
     * * * * * /bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull
-I am sending an output of cronjob to syslog to confirm that everything works as expected.
+I am sending an output of cronjob to syslog to confirm that everything works as expected. 
+Here is `grep CRON /var/log/syslog` output:
+~~~
+Oct  8 14:42:01 ubuntu CRON[2355]: (shurik) CMD (/bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull)
+Oct  8 14:42:03 ubuntu CRON_gitpull: From github.com:shurikby/material-design-template
+Oct  8 14:42:03 ubuntu CRON_gitpull:  * branch            master     -> FETCH_HEAD
+Oct  8 14:42:03 ubuntu CRON_gitpull: Already up to date.
+Oct  8 14:43:01 ubuntu CRON[2371]: (shurik) CMD (/bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull)
+Oct  8 14:43:03 ubuntu CRON_gitpull: From github.com:shurikby/material-design-template
+Oct  8 14:43:03 ubuntu CRON_gitpull:  * branch            master     -> FETCH_HEAD
+Oct  8 14:43:03 ubuntu CRON_gitpull: Already up to date.
+Oct  8 14:44:01 ubuntu CRON[2382]: (shurik) CMD (/bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull)
+Oct  8 14:44:02 ubuntu CRON_gitpull: From github.com:shurikby/material-design-template
+Oct  8 14:44:02 ubuntu CRON_gitpull:  * branch            master     -> FETCH_HEAD
+Oct  8 14:44:02 ubuntu CRON_gitpull: Already up to date.
+Oct  8 14:45:01 ubuntu CRON[2395]: (shurik) CMD (/bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull)
+Oct  8 14:45:03 ubuntu CRON_gitpull: From github.com:shurikby/material-design-template
+Oct  8 14:45:03 ubuntu CRON_gitpull:  * branch            master     -> FETCH_HEAD
+Oct  8 14:45:04 ubuntu CRON_gitpull: Already up to date.
+Oct  8 14:46:01 ubuntu CRON[2406]: (shurik) CMD (/bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull)
+Oct  8 14:46:02 ubuntu CRON_gitpull: From github.com:shurikby/material-design-template
+Oct  8 14:46:02 ubuntu CRON_gitpull:  * branch            master     -> FETCH_HEAD
+Oct  8 14:46:02 ubuntu CRON_gitpull:    9ac5de8..4a7b237  master     -> origin/master
+Oct  8 14:46:02 ubuntu CRON_gitpull: Updating 9ac5de8..4a7b237
+Oct  8 14:46:02 ubuntu CRON_gitpull: Fast-forward
+Oct  8 14:46:02 ubuntu CRON_gitpull:  README.md      | 16 +++++++++-------
+Oct  8 14:46:02 ubuntu CRON_gitpull:  www/index.html |  2 +-
+Oct  8 14:46:02 ubuntu CRON_gitpull:  2 files changed, 10 insertions(+), 8 deletions(-)
+~~~
 
 ## Nginx configuration
 
