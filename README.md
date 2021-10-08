@@ -24,7 +24,7 @@ grep CRON /var/log/syslog   # check if job is actually running
 
     * * * * * /bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull
 I am sending an output of cronjob to syslog to confirm that everything works as expected. 
-Here is `grep CRON /var/log/syslog` output:
+Here is `grep CRON /var/log/syslog` output (screenshot is also available in "Assessment report" folder):
 ~~~
 Oct  8 14:42:01 ubuntu CRON[2355]: (shurik) CMD (/bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull)
 Oct  8 14:42:03 ubuntu CRON_gitpull: From github.com:shurikby/material-design-template
@@ -60,7 +60,7 @@ file `/etc/nginx/sites-available/default`:
 ---	root /var/www/html;
 +++	root /home/shurik/material-design-template/www;
 ~~~
-I have changed path to web root to the folder containing git repository in my home folder.
+I have changed web root path to the folder containing git repository in my home folder.
 
 
 
