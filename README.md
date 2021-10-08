@@ -4,25 +4,26 @@
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install nginx git
-systemctl status nginx
+sudo systemctl status nginx
 git config --global user.name "Aliaksandr Aliaksandrau”
 git config --global user.email "aliaksandra@playtika.com"
 git clone https://github.com/shurikby/material-design-template.git
 ssh-keygen
 cat /home/shurik/.ssh/id_rsa.pub
 git remote set-url origin git@github.com:shurikby/material-design-template
-cp /etc/nginx/sites-available/default ~/default.bak
+cp /etc/nginx/sites-available/default ~/default.bak  #making backup of nginx site configuration
 sudo vi /etc/nginx/sites-available/default
-sudo nginx -T
-systemctl restart nginx
+sudo nginx -T   # test and show nginx configuration
+sudo systemctl restart nginx
 crontab -e
-systemctl restart cron
-grep CRON /var/log/syslog
+sudo systemctl restart cron
+grep CRON /var/log/syslog   # check if job is actually running
 ~~~
 
 ## Cronjob
 
-    * * * * * /bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' >> /home/shurik/cron.log
+    * * * * * /bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull
+I am sending an output of cronjob to syslog to confirm that everything works as expected.
 
 ## Nginx configuration
 
@@ -31,6 +32,7 @@ file `/etc/nginx/sites-available/default`:
 ---	root /var/www/html;
 +++	root /home/shurik/material-design-template/www;
 ~~~
+I have changed path to web root to the folder containing git repository in my home folder.
 
 
 
