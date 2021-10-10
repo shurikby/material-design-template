@@ -1,6 +1,6 @@
 # Assessment report:
 ## Commands used in linux VM:
-There is also a script provided for automatic deployment. You can find it in Assessment report/deploy.sh
+**There is also a script provided for automatic deployment. You can find it in Assessment report/deploy.sh**
 
 ~~~
 sudo apt-get update
@@ -64,7 +64,9 @@ file `/etc/nginx/sites-available/default`:
 ~~~
 I have changed web root path to the folder containing git repository in my home folder.
 
-
+## Git hook
+You can find a script file and screenshot of the result in the report folder. 
+I have to use "-n" key now to commit it.
 
 
 
