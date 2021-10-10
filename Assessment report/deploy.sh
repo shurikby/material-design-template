@@ -24,25 +24,34 @@ if [[ ! -f "$repository_key_path" ]]; then
 	echo "###   Generating a key for github"
 	ssh-keygen -q -t rsa -N '' -f "$repository_key_path"
 	cat  ${repository_key_path}.pub
-	read -p "###    Add key to github and press [Enter] key to continue..."
+	read -p "###   Add key to github and press [Enter] key to continue..."
 else
-	echo "###    The key is already existing, skipping this step"
+	echo "###   The key is already existing, skipping this step"
 fi
 cd ./${github_repo}
 git remote set-url origin git@github.com:${github_user}/${github_repo}
 echo "###   Configuring nginx"
 cp /etc/nginx/sites-available/default ${location}/default.bak  #making backup of nginx site configuration
 sudo sed -i "s|/var/www/html|$webroot|g" "/etc/nginx/sites-available/default"
-sudo nginx -t   # test and show nginx configuration
-sudo systemctl restart nginx
-systemctl is-active --quiet nginx && echo "###   Nginx is installed successfuly" || "### Nginx is not running, check configuration manualy"
+if  sudo nginx -t 2>/dev/null ; then  # test and show nginx configuration
+     echo "###   Restarting nginx service"
+	 sudo systemctl restart nginx
+else
+	echo "###   Nginx configuration file is corrupted"
+	exit 1
+fi
+systemctl is-active --quiet nginx && echo "###   Nginx is installed successfuly" || "###   Nginx is not running, check configuration manualy"
 echo "###   Installing cron job"
 crontab -l > cron.tmp
-echo "* * * * * /bin/sh -c 'cd ${location}/${github_repo} && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull" >> cron.tmp
-crontab cron.tmp
-rm cron.tmp
-sudo systemctl restart cron
-echo "###   Site is deployed" 
+if ! grep -q CRON_gitpull cron.tmp; then
+	echo "* * * * * /bin/sh -c 'cd ${location}/${github_repo} && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull" >> cron.tmp
+	crontab cron.tmp
+    sudo systemctl restart cron
+	echo "###   Cronjob installed"
+else 
+	echo "###   Cronjob already exists"
+fi
+echo "###   Site is deployed successfuly" 
 
 
 
