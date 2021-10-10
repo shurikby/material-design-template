@@ -1,6 +1,8 @@
 # Assessment report:
 ## Commands used in linux VM:
-**There is also a script provided for automatic deployment. You can find it in Assessment report/deploy.sh**
+**There is also a script provided for automatic deployment. You can find it in Assessment-report/deploy.sh**
+![deploy](/Assessment-report/deploy.png)
+
 
 ~~~
 sudo apt-get update
@@ -26,7 +28,7 @@ grep CRON /var/log/syslog   # check if job is actually running
 
     * * * * * /bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull
 I am sending an output of cronjob to syslog to confirm that everything works as expected. 
-Here is `grep CRON /var/log/syslog` output (screenshot is also available in "Assessment report" folder):
+Here is `grep CRON /var/log/syslog` output (screenshot is also available in "Assessment-report" folder):
 ~~~
 Oct  8 14:42:01 ubuntu CRON[2355]: (shurik) CMD (/bin/sh -c 'cd /home/shurik/material-design-template && /usr/bin/git pull origin master' 2>&1 | /usr/bin/logger -t CRON_gitpull)
 Oct  8 14:42:03 ubuntu CRON_gitpull: From github.com:shurikby/material-design-template
@@ -68,6 +70,7 @@ I have changed web root path to the folder containing git repository in my home 
 ## Git hook
 You can find a script file and screenshot of the result in the report folder. 
 I have to use "-n" key now to commit it.
+![filtering sh*t](/Assessment-report/pre-commit.png)
 
 ## Websockets proxy configuration:
 file `/etc/nginx/sites-available/websocket`:
@@ -114,12 +117,29 @@ server {
 }
 ~~~
 We can check if cacheing enabled using curl:
-![curl](./Assessment report/curl.png)
+![curl](/Assessment-report/curl.png)
 
-
-
-
-
+## Merge feature branch with main, rebase git merge commit, squash all commits
+ ~~~
+git checkout -b feature_nginx
+git add .
+git commit
+git log --graph --all
+ ~~~
+  ![feature branch](/Assessment-report/feature_branch.png)  
+~~~
+git checkout master
+git add .
+git commit
+git merge feature_nging
+~~~
+  ![merge](/Assessment-report/merge.png)  
+~~~
+git rebase -i
+git log --graph --all
+~~~
+  ![squash](/Assessment-report/squash.png)  
+  ![rebased](/Assessment-report/rebased.png)  
 
 
 
