@@ -64,13 +64,57 @@ file `/etc/nginx/sites-available/default`:
 ~~~
 I have changed web root path to the folder containing git repository in my home folder.
 
+
 ## Git hook
 You can find a script file and screenshot of the result in the report folder. 
 I have to use "-n" key now to commit it.
 
+## Websockets proxy configuration:
+file `/etc/nginx/sites-available/websocket`:
+~~~
+    map $http_upgrade $connection_upgrade {
+        default upgrade;
+        '' close;
+    }
 
+    upstream websocket {
+        server 10.10.10.10:80;
+    }
 
+    server {
+        listen 8888;
+        location / {
+            proxy_pass http://websocket;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
+            proxy_set_header Host $host;
+        }
+~~~
 
+## Cache static files 
+file `/etc/nginx/sites-available/default`:
+
+~~~
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root /home/shurik/material-design-template/www;
+
+        index index.html index.htm;
+
+        server_name _;
+
+        location ~* \.(?:html?|xml|json|jpg|jpeg|gif|png|ico|css|js)$ {
+          expires 1h;
+          add_header Cache-Control "public";
+          access_log off;
+        }
+}
+~~~
+We can check if cacheing enabled using curl:
+![curl](./Assessment report/curl.png)
 
 
 
