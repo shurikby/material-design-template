@@ -43,9 +43,55 @@ Then configuring it in Global Tools Configuration:
 Small test job to test if node js is installed properly:
 ![nodejs](img/node-v.png)
 ## Create “Multibranch Pipeline” pipeline job (work inside Lab folder) - 3 
+Created Multibranch pipeline named "AliaksandrAliaksandrau" inside Lab folder using the following configuration for branch sources:
+![branch sources](img/b_srcs.png)
+Created a following Jenkinsfile with declarative pipeline:
+```
+pipeline{
+    agent {
+        label 'slave' //running on node "slawe"
+    }
+    tools {
+        nodejs 'NodeJS' // NodeJS definition
+    }
+    stages{
+        stage ('compressing'){
+            parallel{
+		        stage ('JS'){
+                    steps{
+      		            sh "ls www/js/ | xargs -I{file} uglifyjs www/js/{file} -o www/min/{file} --compress"  // compressing JS
+                    } 
+   		        }
+   		        stage ('CSS'){
+                    steps{
+                        sh  "ls www/css/ | xargs -I{file} cleancss www/css/{file} -o www/min/{file}" // cleaning CSS
+                    }
+   		        }
+            }
+        }
+    }
+    post{
+        always {
+            sh "tar --exclude=.git --exclude=www/css --exclude=www/js -czvf artifacts.tar.gz *"  // archiving excluding specified files
+            archiveArtifacts artifacts: 'artifacts.tar.gz' // saving artifacts
+            deleteDir() // cleaning up working directory
+        }
+        success {
+            echo "Success"
+        }
+        failure {
+            echo "There was some error"
+        }        
+    }
 
-
-
+}
+```
+Results:
+All the results are being packed in the tar and archived as build artifacts.
+![multibranch pipeline](img/branches.png)
+![multibranch pipeline](img/master.png)
+Using "Blue Ocean" plugin to confirm stages running in parallel:
+![multibranch pipeline](img/multibranch_graph.png)
 ## Setup the GitHub webhook to trigger the jobs - 2 
 
 

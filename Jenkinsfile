@@ -1,21 +1,21 @@
 pipeline{
     agent {
-        label 'slave'
+        label 'slave' //running on node "slawe"
     }
     tools {
-        nodejs 'NodeJS'
+        nodejs 'NodeJS' // NodeJS definition
     }
     stages{
         stage ('compressing'){
             parallel{
 		        stage ('JS'){
                     steps{
-      		            sh "ls www/js/ | xargs -I{file} uglifyjs www/js/{file} -o www/min/{file} --compress" 
+      		            sh "ls www/js/ | xargs -I{file} uglifyjs www/js/{file} -o www/min/{file} --compress"  // compressing JS
                     } 
    		        }
    		        stage ('CSS'){
                     steps{
-                        sh  "ls www/css/ | xargs -I{file} cleancss www/css/{file} -o www/min/{file}"
+                        sh  "ls www/css/ | xargs -I{file} cleancss www/css/{file} -o www/min/{file}" // cleaning CSS
                     }
    		        }
             }
