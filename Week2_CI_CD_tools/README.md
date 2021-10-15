@@ -12,6 +12,8 @@
 ~~~
 Changing port from 8080 to 8081:
 ![8081](img/j_port.png)
+It is also important to change Jenkins URL for it to function properly:
+![8081](img/j_location.png)
 Installing Jenkins from web browser with additional plugins:
 ![plugins](img/j_installation.png)
 Adding user to jenkins:
@@ -21,7 +23,7 @@ Adding user to jenkins:
 ### On slave node:
 sudo apt update && sudo apt install -y openjdk-8-jre git
 java -version #verify that java is installed
-sudo useradd jenkins-aliaksandraliaksandrau #add user with homedir /var/lib/jenkins/
+sudo useradd jenkins-aliaksandraliaksandrau #add user for Jenkins
 ### On master node:
 sudo su - jenkins #login under jenkins user
 ssh-keygen #generate keys
@@ -49,7 +51,7 @@ Created a following Jenkinsfile with declarative pipeline:
 ```
 pipeline{
 	agent {
-		label 'slave' //running on node "slawe"
+		label 'slave' //running on node "slave"
 	}
 	tools {
 		nodejs 'NodeJS' // NodeJS definition
