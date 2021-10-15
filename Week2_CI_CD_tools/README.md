@@ -97,9 +97,13 @@ Configuring github in Jenkins configuration:
 ![github hook](img/github_s.png)
 Generating private token for Jenkins (Saved as "Secret text" in Jenkins credentials):
 ![github hook](img/github_token.png)
-
+Creating a webhook in Github interface
+![github hook](img/github_hook.png)
+Results:
+Build is started by push event:
+![build](img/build_webhook.png)
+![build](img/multibranch_event.png)
 ##  * Use Scripted pipeline instead of declarative - * 
-
 
 
 ## * Spin up VM with installed Artifactory - *  
