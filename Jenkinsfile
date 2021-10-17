@@ -6,8 +6,19 @@ node('slave'){ //running on node "slave"
 			sh "ls -la"
 		}
 	try {
-		def parallel = ["JS" : {stage('js'){sh "ls www/js/ | xargs -I{file} uglifyjs www/js/{file} -o www/min/{file} --compress"}}, "CSS" : {stage('css'){sh  "ls www/css/ | xargs -I{file} cleancss www/css/{file} -o www/min/{file}"}}]
-		parallel parallel
+		stage("compression") {
+   			def stages = [:]
+      		stages['JS'] = {
+        		stage(e) {
+					sh "ls www/js/ | xargs -I{file} uglifyjs www/js/{file} -o www/min/{file} --compress"
+        		}
+			stages['CSS'] = {
+        		stage(e) {
+					sh  "ls www/css/ | xargs -I{file} cleancss www/css/{file} -o www/min/{file}"
+        		}
+      		}
+   	 	}
+		parallel stages
 	}
 	catch(ex){
 		echo "Failure"
