@@ -71,19 +71,23 @@ pipeline{
    				}
 			}
 		}
+		stage ('tarball'){
+			steps{
+				sh "tar --exclude=.git --exclude=www/css --exclude=www/js -czvf artifacts.tar.gz *"  // archiving excluding specified files
+			}
+		}
 	}
 	post{
-		always {
-			sh "tar --exclude=.git --exclude=www/css --exclude=www/js -czvf artifacts.tar.gz *"  // archiving excluding specified files
-			archiveArtifacts artifacts: 'artifacts.tar.gz' // saving artifacts
-			deleteDir() // cleaning up working directory
-		}
 		success {
+			archiveArtifacts artifacts: 'artifacts.tar.gz' // saving artifacts
 			echo "Success"
 		}
 		failure {
 			echo "There was some error"
-		}        
+		} 
+		cleanup {
+			deleteDir() // cleaning up working directory
+		}       
 	}
 
 }
@@ -91,9 +95,9 @@ pipeline{
 Results:
 All the results are being packed in the tar and archived as build artifacts.
 ![multibranch pipeline](img/branches.png)
-![multibranch pipeline](img/master.png)
+![multibranch pipeline](img/master1.png)
 Using "Blue Ocean" plugin to confirm stages running in parallel:
-![multibranch pipeline](img/multibranch_graph.png)
+![multibranch pipeline](img/multibranch_graph1.png)
 ## Setup the GitHub webhook to trigger the jobs - 2 
 Configuring github in Jenkins configuration:
 ![github hook](img/github_s.png)
@@ -109,6 +113,15 @@ Build is started by push event:
 
 
 ## * Spin up VM with installed Artifactory - *  
-
-
+```
+wget -qO - https://api.bintray.com/orgs/jfrog/keys/gpg/public.key | sudo apt-key add -
+echo "deb https://jfrog.bintray.com/artifactory-debs bionic main" | sudo tee /etc/apt/sources.list.d/jfrog.list
+sudo apt-get update
+sudo apt-get install jfrog-artifactory-oss
+sudo systemctl start artifactory
+sudo systemctl enable artifactory
+sudo systemctl status artifactory
+```
+Artifactory is installed successfuly, initial configuration is required using web page, default credentials are admin:password
+![artifactory](img/artif1.png)
 ## * Add new stage for publishing artifacts into Artifactory - * 

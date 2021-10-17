@@ -1,6 +1,6 @@
 pipeline{
 	agent {
-		label 'slave' //running on node "slawe"
+		label 'slave' //running on node "slave"
 	}
 	tools {
 		nodejs 'NodeJS' // NodeJS definition
@@ -20,19 +20,23 @@ pipeline{
    				}
 			}
 		}
+		stage ('tarball'){
+			steps{
+				sh "tar --exclude=.git --exclude=www/css --exclude=www/js -czvf artifacts.tar.gz *"  // archiving excluding specified files
+			}
+		}
 	}
 	post{
-		always {
-			sh "tar --exclude=.git --exclude=www/css --exclude=www/js -czvf artifacts.tar.gz *"  // archiving excluding specified files
-			archiveArtifacts artifacts: 'artifacts.tar.gz' // saving artifacts
-			deleteDir() // cleaning up working directory
-		}
 		success {
+			archiveArtifacts artifacts: 'artifacts.tar.gz' // saving artifacts
 			echo "Success"
 		}
 		failure {
 			echo "There was some error"
-		}        
+		} 
+		cleanup {
+			deleteDir() // cleaning up working directory
+		}       
 	}
 
 }
