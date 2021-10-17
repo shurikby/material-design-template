@@ -125,3 +125,20 @@ sudo systemctl status artifactory
 Artifactory is installed successfuly, initial configuration is required using web page, default credentials are admin:password
 ![artifactory](img/artif1.png)
 ## * Add new stage for publishing artifacts into Artifactory - * 
+I think that it is a good practice to publish artifacts to artifactory only if the build is successful, so I preffer to do it in the "post" section, rather then in one of stages. 
+To publish to artifactory I have modified Jenkinsfile in this way:
+```
+	post{
+		success {
+			withCredentials([usernamePassword(credentialsId: 'artifactory', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+				sh "curl -u${USERNAME}:${PASSWORD} -T artifacts.tar.gz \"http://192.168.1.13:8081/artifactory/mdt/artifacts${env.BUILD_NUMBER}.tar.gz\""
+			}
+			echo "Success"
+		}
+    }
+```
+I use withCredentials function, which is a part of "Credentials Binding" plugin, to hide curl password from everyone's eyes.
+
+It works like a charm:
+![artifactory](img/artif_pipe.png)
+![artifactory](img/artifactory.png)

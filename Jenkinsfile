@@ -29,6 +29,9 @@ pipeline{
 	post{
 		success {
 			archiveArtifacts artifacts: 'artifacts.tar.gz' // saving artifacts
+			withCredentials([usernamePassword(credentialsId: 'artifactory', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+				sh "curl -u${USERNAME}:${PASSWORD} -T artifacts.tar.gz \"http://192.168.1.13:8081/artifactory/mdt/artifacts${env.BUILD_NUMBER}.tar.gz\""
+			}
 			echo "Success"
 		}
 		failure {
